@@ -4,8 +4,6 @@ from git import Repo
 import anthropic
 
 def main():
-    # anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
-
     cwd = Path()
     parent: Path = Path(os.getcwd())
     remote_base_file = Path()
@@ -34,7 +32,7 @@ def main():
     client = anthropic.Anthropic()
 
     message = client.messages.create(
-        model="claude-sonnet-4-0",
+        model="claude-3-5-sonnet-latest",
         max_tokens=1000,
         temperature=1,
         system="Analyze this diff, write a commit message based on this diff, STRICTLY following the following format:\n"
