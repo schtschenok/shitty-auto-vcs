@@ -55,7 +55,7 @@ def main():
     commit_message = commit_message
     repo.git.commit('-m', commit_message)
 
-    repo.git.push()
+    # repo.git.push()
 
 
 if __name__ == "__main__":

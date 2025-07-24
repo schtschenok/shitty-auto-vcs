@@ -1,2 +1,3 @@
 .venv
 
+/home/tyoma/Projects/shitty-auto-vcs/.venv/bin/python /home/tyoma/Projects/shitty-auto-vcs/main.py
