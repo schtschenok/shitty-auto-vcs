@@ -21,7 +21,8 @@ def main(push=False):
             shitty_auto_vcs = True
             break
     if not shitty_auto_vcs:
-        raise (ValueError(".shitty_auto_vcs file either not found or not valid"))
+        logger.info(".shitty_auto_vcs file either not found or not valid")
+        exit(1)
 
     os.chdir(remote_base_file.parent)
 
@@ -58,7 +59,7 @@ def main(push=False):
             )
         ]
     )
-    commit_message = message.content[0].text
+    commit_message = message.content[0].text.strip()
 
     logger.info(f"Commit message: {commit_message}")
     repo.git.commit('-m', commit_message)
