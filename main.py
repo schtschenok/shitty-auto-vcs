@@ -1,9 +1,15 @@
 from pathlib import Path
 import os
+import argparse
+import logging
 from git import Repo
 import anthropic
 
-def main():
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+
+def main(push=False):
     cwd = Path()
     parent: Path = Path(os.getcwd())
     remote_base_file = Path()
@@ -22,13 +28,15 @@ def main():
     repo = Repo(".")
 
     if not repo.is_dirty(untracked_files=True):
-        print("No changes to commit.")
+        logger.info("No changes to commit.")
         exit(0)
 
+    logger.info("Staging all changes...")
     repo.git.add(all=True)
 
     diff_output = repo.git.diff('HEAD', '--histogram')
 
+    logger.info("Generating commit message using AI...")
     client = anthropic.Anthropic()
 
     message = client.messages.create(
@@ -52,11 +60,21 @@ def main():
     )
     commit_message = message.content[0].text
 
-    commit_message = commit_message
+    logger.info(f"Commit message: {commit_message}")
     repo.git.commit('-m', commit_message)
+    logger.info("Changes committed successfully.")
 
-    # repo.git.push()
+    if push:
+        logger.info("Pushing to remote repository...")
+        repo.git.push()
+        logger.info("Changes pushed successfully.")
+    else:
+        logger.info("Skipping push (use --push to push changes).")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Auto-generate commit messages and commit changes")
+    parser.add_argument("--push", action="store_true", help="Push changes to remote repository after committing")
+
+    args = parser.parse_args()
+    main(push=args.push)
