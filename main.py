@@ -6,7 +6,7 @@ from git import Repo
 import anthropic
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 def main(push=False):
@@ -28,15 +28,15 @@ def main(push=False):
     repo = Repo(".")
 
     if not repo.is_dirty(untracked_files=True):
-        logger.info("No changes to commit.")
+        logger.debug("No changes to commit.")
         exit(0)
 
-    logger.info("Staging all changes...")
+    logger.debug("Staging all changes...")
     repo.git.add(all=True)
 
     diff_output = repo.git.diff('HEAD', '--histogram')
 
-    logger.info("Generating commit message using AI...")
+    logger.debug("Generating commit message using AI...")
     client = anthropic.Anthropic()
 
     message = client.messages.create(
@@ -62,12 +62,13 @@ def main(push=False):
 
     logger.info(f"Commit message: {commit_message}")
     repo.git.commit('-m', commit_message)
-    logger.info("Changes committed successfully.")
+    logger.debug("Changes committed successfully.")
 
     if push:
-        logger.info("Pushing to remote repository...")
+        logger.debug("Pushing to remote repository...")
         repo.git.push()
-        logger.info("Changes pushed successfully.")
+        logger.debug("Changes pushed successfully.")
+        logger.info("Changes pushed to remote repository.")
     else:
         logger.info("Skipping push (use --push to push changes).")
 
