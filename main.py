@@ -28,7 +28,7 @@ def main(push=False):
     repo = Repo(".")
 
     if not repo.is_dirty(untracked_files=True):
-        logger.debug("No changes to commit.")
+        logger.info("No changes to commit.")
         exit(0)
 
     logger.debug("Staging all changes...")
