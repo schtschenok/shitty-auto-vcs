@@ -1,13 +1,9 @@
 from pathlib import Path
 import os
 import argparse
-import logging
 from git import Repo
 import anthropic
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 def main(push=False):
     cwd = Path()
