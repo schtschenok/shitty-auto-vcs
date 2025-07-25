@@ -27,6 +27,10 @@ def main(push=False):
 
     if not repo.is_dirty(untracked_files=True):
         logger.info("No changes to commit.")
+        if push:
+            logger.debug("Pushing to remote repository...")
+            repo.git.push()
+            logger.info("Pushed to remote repository (no local changes).")
         exit(0)
 
     logger.debug("Staging all changes...")
