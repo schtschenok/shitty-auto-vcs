@@ -5,6 +5,7 @@ from git import Repo
 import anthropic
 from loguru import logger
 
+
 def main(push=False):
     cwd = Path()
     parent: Path = Path(os.getcwd())
