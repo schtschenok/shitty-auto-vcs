@@ -71,8 +71,19 @@ def main(push=False):
 
 
 if __name__ == "__main__":
+    # Configure loguru logger
+    logger.remove()
+    logger.add(lambda msg: print(msg, end=""), level="INFO")
+
     parser = argparse.ArgumentParser(description="Auto-generate commit messages and commit changes")
     parser.add_argument("--push", action="store_true", help="Push changes to remote repository after committing")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
+
+    # Set debug level if flag is provided
+    if args.debug:
+        logger.remove()
+        logger.add(lambda msg: print(msg, end=""), level="DEBUG")
+
     main(push=args.push)
